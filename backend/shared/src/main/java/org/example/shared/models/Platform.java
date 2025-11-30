@@ -1,4 +1,4 @@
-package org.example.gateway.model;
+package org.example.shared.models;
 
 public enum Platform {
     WEB,
