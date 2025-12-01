@@ -1,0 +1,100 @@
+product: flight
+widgets:
+  # Widget 1: Flight Search Deals
+  - id: flight-deals
+    name: "Personalized Flight Deals"
+    trigger:
+      eventTypes:
+        - FLIGHT_SEARCH
+      conditions: []
+    personalization:
+      titleTemplate: "Cheap Flights to {{to}}"
+      subtitleTemplate: "From €{{minPrice}} - Based on your search"
+      ctaLabel: "Book Now"
+      ctaUrl: "/flight/search?from={{from}}&to={{to}}"
+    componentType: "carousel"
+    priority: 10
+    platformVisibility:
+      - WEB
+      - ANDROID
+      - IOS
+    ttlSeconds: 3600
+
+  # Widget 2: Flight Booking Status
+  - id: flight-booking-status
+    name: "Active Flight Booking Status"
+    trigger:
+      eventTypes:
+        - FLIGHT_BOOKED
+      conditions: []
+    personalization:
+      titleTemplate: "Your Flight to {{to}}"
+      subtitleTemplate: "Flight {{flightNumber}} - Departure {{departureDate}}"
+      ctaLabel: "View Details"
+      ctaUrl: "/flight/booking/{{bookingId}}"
+    componentType: "card"
+    priority: 15
+    platformVisibility:
+      - ANDROID
+      - IOS
+    ttlSeconds: 86400
+
+  # Widget 3: Popular Destinations
+  - id: flight-popular-destinations
+    name: "Popular Flight Destinations"
+    trigger:
+      eventTypes:
+        - HOME_VISIT
+      conditions: []
+    personalization:
+      titleTemplate: "Discover Popular Destinations"
+      subtitleTemplate: "Cheap flights to top destinations"
+      ctaLabel: "View All Deals"
+      ctaUrl: "/flight/deals"
+    componentType: "banner"
+    priority: 5
+    platformVisibility:
+      - WEB
+      - ANDROID
+      - IOS
+    ttlSeconds: 7200
+
+  # Widget 4: Weekend Trips
+  - id: flight-weekend-trips
+    name: "Weekend Flight Deals"
+    trigger:
+      eventTypes:
+        - FLIGHT_SEARCH
+      conditions: []
+    personalization:
+      titleTemplate: "Weekend Getaways"
+      subtitleTemplate: "Spontaneous travel from €{{minPrice}}"
+      ctaLabel: "Weekend Trips"
+      ctaUrl: "/flight/weekend-deals"
+    componentType: "card"
+    priority: 8
+    platformVisibility:
+      - WEB
+      - ANDROID
+      - IOS
+    ttlSeconds: 3600
+
+  # Widget 5: Last Minute Deals
+  - id: flight-last-minute
+    name: "Last Minute Flight Deals"
+    trigger:
+      eventTypes:
+        - FLIGHT_SEARCH
+      conditions: []
+    personalization:
+      titleTemplate: "Last Minute to {{to}}"
+      subtitleTemplate: "Save now - Departure within 7 days"
+      ctaLabel: "Last Minute Offers"
+      ctaUrl: "/flight/last-minute?to={{to}}"
+    componentType: "banner"
+    priority: 12
+    platformVisibility:
+      - WEB
+      - ANDROID
+      - IOS
+    ttlSeconds: 1800

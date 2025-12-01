@@ -1,0 +1,17 @@
+product: test
+widgets:
+  - id: test-card
+    name: "Test Card"
+    trigger:
+      eventTypes:
+        - TEST_EVENT
+    personalization:
+      titleTemplate: "Hello {{name}}"
+      subtitleTemplate: "Testing"
+      ctaLabel: "Click"
+      ctaUrl: "/test"
+    componentType: "card"
+    priority: 1
+    platformVisibility:
+      - WEB
+    ttlSeconds: 300

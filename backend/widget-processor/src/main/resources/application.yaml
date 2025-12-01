@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: widget-processor
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 1
+          max-wait: 100ms
+
+processor:
+  stream:
+    key: user-events
+    consumer-group: widget-processor-group
+    consumer-name: processor-${random.uuid}
+    batch-size: 20
+    poll-interval-ms: 100
+    block-ms: 1000
+
+  cache:
+    default-ttl-seconds: 3600
+    max-widgets-per-user: 5
+
+  rules:
+    directory: classpath:widget_rules/
