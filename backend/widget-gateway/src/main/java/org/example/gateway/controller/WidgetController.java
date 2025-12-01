@@ -1,11 +1,9 @@
 package org.example.gateway.controller;
 
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.example.gateway.model.Platform;
-import org.example.gateway.model.WidgetResponse;
 import org.example.gateway.service.WidgetService;
-import org.springframework.http.ResponseEntity;
+import org.example.shared.models.Platform;
+import org.example.shared.models.WidgetResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

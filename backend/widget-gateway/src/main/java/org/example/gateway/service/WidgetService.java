@@ -1,10 +1,11 @@
 package org.example.gateway.service;
 
-import org.example.gateway.model.Platform;
-import org.example.gateway.model.WidgetDto;
-import org.example.gateway.model.WidgetResponse;
-import org.example.gateway.repository.WidgetCacheDto;
+
+import org.example.shared.models.WidgetCacheDto;
 import org.example.gateway.repository.WidgetCacheRepository;
+import org.example.shared.models.Platform;
+import org.example.shared.models.WidgetDto;
+import org.example.shared.models.WidgetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,8 @@ package org.example.gateway.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.shared.models.WidgetCacheDto;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
