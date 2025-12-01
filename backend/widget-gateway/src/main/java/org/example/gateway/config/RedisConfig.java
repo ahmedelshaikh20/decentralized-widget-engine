@@ -1,6 +1,7 @@
 package org.example.gateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,8 +13,8 @@ public class RedisConfig {
 
 
   @Bean
-  public RedisConnectionFactory redisConnectionFactory() {
-    return new LettuceConnectionFactory("localhost", 6379);
+  public RedisConnectionFactory redisConnectionFactory( @Value("${spring.data.redis.host}") String host, @Value("${spring.data.redis.port}") int port) {
+    return new LettuceConnectionFactory(host, port);
   }
 
   @Bean
