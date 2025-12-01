@@ -1,8 +1,9 @@
 package org.example.gateway.repository;
 
-import org.example.gateway.model.Platform;
-import org.example.gateway.model.WidgetData;
-import org.example.gateway.model.WidgetDto;
+
+import org.example.shared.models.Platform;
+import org.example.shared.models.WidgetData;
+import org.example.shared.models.WidgetDto;
 
 import java.util.List;
 
