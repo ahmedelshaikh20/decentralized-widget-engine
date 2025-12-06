@@ -37,6 +37,11 @@ android {
     buildFeatures {
         compose = true
     }
+  packaging {
+    resources {
+      excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+    }
+  }
 }
 
 dependencies {
@@ -56,4 +61,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+  implementation(libs.androidx.navigation.compose)
+    //Retrofit
+  implementation(libs.logging.interceptor)
+  implementation (libs.converter.gson)
+  implementation (libs.retrofit)
+
+  implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+  implementation("com.squareup.okhttp3:okhttp:4.12.0")
+  //Koin
+  implementation(libs.koin.core)
+  implementation(libs.koin.android)
+  implementation(libs.koin.androidx.compose)
+
+  //Coil
+  implementation("io.coil-kt:coil-compose:2.6.0")
+
+
 }
