@@ -2,61 +2,72 @@ package org.example.widgetprocessor.model.widgetrule;
 
 public class PersonalizationConfig {
 
-    private String titleTemplate;
-    private String subtitleTemplate;
-    private String ctaLabel;
-    private String ctaUrl;
-    private String imageUrl;
-    private String itemsTemplate;
+  private String titleTemplate;
+  private String subtitleTemplate;
+  private String ctaLabel;
+  private String ctaUrl;
+  private String imageUrl;
+  private String itemsTemplate;
+  private boolean titleAI;
+  private boolean subtitleAI;
 
-    public PersonalizationConfig() {}
+  public PersonalizationConfig() {
+  }
 
 
-    public String getTitleTemplate() {
-        return titleTemplate;
-    }
 
-    public void setTitleTemplate(String titleTemplate) {
-        this.titleTemplate = titleTemplate;
-    }
+  public boolean isTitleAI() { return titleAI; }
+  public void setTitleAI(boolean titleAI) { this.titleAI = titleAI; }
 
-    public String getSubtitleTemplate() {
-        return subtitleTemplate;
-    }
+  public boolean isSubtitleAI() { return subtitleAI; }
+  public void setSubtitleAI(boolean subtitleAI) { this.subtitleAI = subtitleAI; }
 
-    public void setSubtitleTemplate(String subtitleTemplate) {
-        this.subtitleTemplate = subtitleTemplate;
-    }
 
-    public String getCtaLabel() {
-        return ctaLabel;
-    }
+  public String getTitleTemplate() {
+    return titleTemplate;
+  }
 
-    public void setCtaLabel(String ctaLabel) {
-        this.ctaLabel = ctaLabel;
-    }
+  public void setTitleTemplate(String titleTemplate) {
+    this.titleTemplate = titleTemplate;
+  }
 
-    public String getCtaUrl() {
-        return ctaUrl;
-    }
+  public String getSubtitleTemplate() {
+    return subtitleTemplate;
+  }
 
-    public void setCtaUrl(String ctaUrl) {
-        this.ctaUrl = ctaUrl;
-    }
+  public void setSubtitleTemplate(String subtitleTemplate) {
+    this.subtitleTemplate = subtitleTemplate;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public String getCtaLabel() {
+    return ctaLabel;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public void setCtaLabel(String ctaLabel) {
+    this.ctaLabel = ctaLabel;
+  }
 
-    public String getItemsTemplate() {
-        return itemsTemplate;
-    }
+  public String getCtaUrl() {
+    return ctaUrl;
+  }
 
-    public void setItemsTemplate(String itemsTemplate) {
-        this.itemsTemplate = itemsTemplate;
-    }
+  public void setCtaUrl(String ctaUrl) {
+    this.ctaUrl = ctaUrl;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public String getItemsTemplate() {
+    return itemsTemplate;
+  }
+
+  public void setItemsTemplate(String itemsTemplate) {
+    this.itemsTemplate = itemsTemplate;
+  }
 }
