@@ -1,45 +1,55 @@
 package org.example.gateway.service;
 
-
-import org.example.shared.models.WidgetCacheDto;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.example.gateway.repository.WidgetCacheRepository;
 import org.example.shared.models.Platform;
+import org.example.shared.models.WidgetCacheDto;
 import org.example.shared.models.WidgetDto;
 import org.example.shared.models.WidgetResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
-public class WidgetService{
+public class WidgetService {
 
-  @Autowired
+
   private final WidgetCacheRepository repository;
-
-  public WidgetService(WidgetCacheRepository repository) {
+  private final CircuitBreaker circuitBreaker;
+  public WidgetService(WidgetCacheRepository repository, CircuitBreakerRegistry circuitBreakerRegistry) {
     this.repository = repository;
+    this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("widgetCache");
   }
 
 
-  public WidgetResponse getWidgetsForUser(String userId , Platform platform){
-    List<WidgetCacheDto> cachedWidgets = repository.getWidgets(userId);
-    if (cachedWidgets == null || cachedWidgets.isEmpty()) {
+  public void clearPersonalization(String userId) {
+    repository.deleteWidgetsForUser(userId);
+  }
+
+  public WidgetResponse getWidgetsForUser(String userId, Platform platform) {
+
+    Supplier<List<WidgetCacheDto>> redisCall = () -> repository.getWidgetsMerged(userId);
+    Supplier<List<WidgetCacheDto>> protectedCall = CircuitBreaker.decorateSupplier(circuitBreaker, redisCall);
+
+    List<WidgetCacheDto> source;
+    try {
+      source = protectedCall.get();
+    } catch (Exception ex) {
+      source = List.of();
+    }
+
+    if (source.isEmpty()) {
       return new WidgetResponse(List.of());
     }
-    List<WidgetCacheDto> filtered = cachedWidgets.stream()
+    List<WidgetDto> result = source.stream()
       .filter(widget -> widget.platformVisibility().contains(platform))
-      .toList();
-
-    List<WidgetCacheDto> sorted = filtered.stream()
       .sorted(Comparator.comparingInt(WidgetCacheDto::priority).reversed())
-      .toList();
-
-    List<WidgetDto> result = sorted.stream()
       .map(WidgetCacheDto::toBusinessModel)
       .toList();
 
     return new WidgetResponse(result);
   }
+
 }
