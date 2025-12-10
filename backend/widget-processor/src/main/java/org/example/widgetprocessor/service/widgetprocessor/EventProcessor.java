@@ -1,76 +1,38 @@
 package org.example.widgetprocessor.service.widgetprocessor;
 
 import org.example.widgetprocessor.model.userevent.UserEvent;
+import org.example.widgetprocessor.repository.WidgetCacheWriteRepository;
+import org.example.widgetprocessor.service.ruleservice.RuleEngineService;
+import org.example.widgetprocessor.service.widgetservice.WidgetBuilderService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EventProcessor {
 
-    public void processEvent(UserEvent event) {
+  private final RuleEngineService ruleEngine;
+  private final WidgetBuilderService builder;
+  private final WidgetCacheWriteRepository cache;
 
-        // TODO: Add the logic of handling each event here
-        switch (event.getEventType()) {
-            case FLIGHT_SEARCH:
-                handleFlightSearch(event);
-                break;
+  public EventProcessor(RuleEngineService ruleEngine, WidgetBuilderService builder, WidgetCacheWriteRepository cache) {
+    this.ruleEngine = ruleEngine;
+    this.builder = builder;
+    this.cache = cache;
+  }
 
-            case FLIGHT_BOOKED:
-                handleFlightBooked(event);
-                break;
+  public void processEvent(UserEvent event) {
 
-            case INSURANCE_QUOTE:
-                handleInsuranceQuote(event);
-                break;
+    var rules = ruleEngine.calculateEligibleWidgets(event);
+    if (rules.isEmpty()) return;
 
-            case INSURANCE_COMPLETED:
-                handleInsuranceCompleted(event);
-                break;
+    String userId = event.getUserId();
 
-            case FURNITURE_BROWSE:
-                handleFurnitureBrowse(event);
-                break;
+    for (var rule : rules) {
+      var widget = builder.build(event, rule);
 
-            case FURNITURE_FAVORITE:
-                handleFurnitureFavorite(event);
-                break;
-
-            case CONTRACT_SIGNED:
-                handleContractSigned(event);
-                break;
-
-            case HOME_VISIT:
-                handleHomeVisit(event);
-                break;
-
-            case TEST_EVENT:
-            default:
-             //   log.debug("Received TEST_EVENT or unsupported event type.");
-        }
+      switch (rule.getAction()) {
+        case ADD_WIDGET, UPDATE_WIDGET -> cache.saveWidget(userId, widget);
+        case REMOVE_WIDGET -> cache.removeWidget(userId, widget.id());
+      }
     }
-
-
-
-    private void handleFlightSearch(UserEvent event) {
-    }
-
-    private void handleFlightBooked(UserEvent event) {
-    }
-
-    private void handleInsuranceQuote(UserEvent event) {
-    }
-
-    private void handleInsuranceCompleted(UserEvent event) {
-    }
-
-    private void handleFurnitureBrowse(UserEvent event) {
-    }
-
-    private void handleFurnitureFavorite(UserEvent event) {
-    }
-
-    private void handleContractSigned(UserEvent event) {
-    }
-
-    private void handleHomeVisit(UserEvent event) {
-    }
+  }
 }
