@@ -1,14 +1,12 @@
 package org.example.widgetprocessor.service.widgetservice;
 
-import org.example.shared.models.CarouselItem;
-import org.example.shared.models.WidgetCacheDto;
-import org.example.shared.models.WidgetData;
+import org.example.shared.models.widgets.WidgetCacheDto;
+import org.example.shared.models.widgets.WidgetPayload;
 import org.example.widgetprocessor.model.userevent.UserEvent;
 import org.example.widgetprocessor.model.widgetrule.WidgetRule;
-import org.example.widgetprocessor.model.widgetrule.PersonalizationConfig;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +14,28 @@ import java.util.Map;
 public class WidgetBuilderServiceImpl implements WidgetBuilderService {
 
   @Override
-  public WidgetCacheDto build(UserEvent event, WidgetRule rule) {
+  public WidgetCacheDto build(
+    UserEvent event,
+    WidgetRule rule,
+    Map<String, Object> lastEventMeta,
+    List<Map<String, Object>> history
+  ) {
+    // ---------------- Build Context ----------------
+    Map<String, Object> context = new HashMap<>();
 
-    WidgetData data = buildWidgetData(event, rule.getPersonalization(), rule);
+    // Event metadata
+    if (event.getMetadata() != null) {
+      context.putAll(event.getMetadata());
+    }
 
+    // Last metadata snapshot
+    context.put("last", lastEventMeta);
 
+    // History
+    context.put("history", history);
+
+    // ---------------- Build Payload ----------------
+    WidgetPayload payload = buildPayload(rule, context);
 
     return new WidgetCacheDto(
       rule.getId(),
@@ -29,88 +44,98 @@ public class WidgetBuilderServiceImpl implements WidgetBuilderService {
       rule.getPriority(),
       rule.getPlatformVisibility(),
       rule.getTtlSeconds(),
-      data
+      payload
     );
   }
 
-  private WidgetData buildWidgetData(UserEvent event,
-                                     PersonalizationConfig personalization,
-                                     WidgetRule rule) {
+  // =========================================================
+  // Payload Builder (NO UI KNOWLEDGE HERE)
+  // =========================================================
 
-    if (personalization == null) {
-      return emptyData();
-    }
+  private WidgetPayload buildPayload(
+    WidgetRule rule,
+    Map<String, Object> ctx
+  ) {
+    Map<String, Object> content =
+      renderTemplateMap(rule.getContentTemplate(), ctx);
 
-    String title = renderTemplate(personalization.getTitleTemplate(), event);
-    String subtitle = renderTemplate(personalization.getSubtitleTemplate(), event);
-    String ctaLabel = renderTemplate(personalization.getCtaLabel(), event);
-    String ctaUrl = renderTemplate(personalization.getCtaUrl(), event);
+    Map<String, Object> layout =
+      rule.getLayoutConfig() == null ? Map.of() : rule.getLayoutConfig();
 
-    String componentType = rule.getComponentType().toLowerCase();
-    Map<String, Object> metadata = event.getMetadata();
+    return new WidgetPayload(rule.getSchemaVersion(), layout, content);
+  }
 
-    String imageUrl = null;
-    String iconUrl = null;
-    List<CarouselItem> items = null;
+  // =========================================================
+  // Recursive Template Rendering
+  // =========================================================
 
-    if (componentType.equals("banner")) {
-      Map<String, Object> hero = (Map<String, Object>) metadata.get("hero");
-      if (hero != null) {
-        imageUrl = safeString(hero.get("imageUrl"));
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> renderTemplateMap(
+    Map<String, Object> template,
+    Map<String, Object> ctx
+  ) {
+    if (template == null) return Map.of();
+
+    Map<String, Object> result = new HashMap<>();
+
+    for (Map.Entry<String, Object> entry : template.entrySet()) {
+      Object value = entry.getValue();
+
+      if (value instanceof String str) {
+        result.put(entry.getKey(), renderTemplate(str, ctx));
+
+      } else if (value instanceof Map<?, ?> map) {
+        result.put(
+          entry.getKey(),
+          renderTemplateMap((Map<String, Object>) map, ctx)
+        );
+
+      } else if (value instanceof List<?> list) {
+        result.put(
+          entry.getKey(),
+          renderTemplateList((List<Object>) list, ctx)
+        );
+
+      } else {
+        // primitives, objects → pass through untouched
+        result.put(entry.getKey(), value);
       }
     }
 
-    if (componentType.equals("card")) {
-      iconUrl = safeString(metadata.get("iconUrl"));
-    }
-
-    if (componentType.equals("carousel")) {
-      List<Map<String, Object>> deals = (List<Map<String, Object>>) metadata.getOrDefault("deals", null);
-      items = buildCarouselItems(deals);
-    }
-
-    return new WidgetData(
-      title,
-      subtitle,
-      imageUrl,
-      iconUrl,
-      items,
-      ctaLabel,
-      ctaUrl
-    );
-  }
-
-  private List<CarouselItem> buildCarouselItems(List<Map<String, Object>> deals) {
-    if (deals == null) return null;
-
-    List<CarouselItem> list = new ArrayList<>();
-    for (Map<String, Object> d : deals) {
-      list.add(new CarouselItem(
-        safeString(d.get("title")),
-        safeString(d.get("imageUrl")),
-        safeString(d.get("ctaLabel")),
-        safeString(d.get("ctaUrl"))
-      ));
-    }
-    return list;
-  }
-
-  private String renderTemplate(String template, UserEvent event) {
-    if (template == null) return null;
-
-    String result = template;
-    for (Map.Entry<String, Object> e : event.getMetadata().entrySet()) {
-      String key = "{{" + e.getKey() + "}}";
-      result = result.replace(key, safeString(e.getValue()));
-    }
     return result;
   }
 
-  private String safeString(Object o) {
-    return (o == null) ? null : o.toString();
+  @SuppressWarnings("unchecked")
+  private List<Object> renderTemplateList(
+    List<Object> list,
+    Map<String, Object> ctx
+  ) {
+    return list.stream().map(item -> {
+      if (item instanceof String str) {
+        return renderTemplate(str, ctx);
+      } else if (item instanceof Map<?, ?> map) {
+        return renderTemplateMap((Map<String, Object>) map, ctx);
+      } else {
+        return item;
+      }
+    }).toList();
   }
 
-  private WidgetData emptyData() {
-    return new WidgetData(null, null, null, null, null, null, null);
+  // =========================================================
+  // Simple String Template Engine
+  // =========================================================
+
+  private String renderTemplate(String template, Map<String, Object> ctx) {
+    if (template == null) return null;
+
+    String result = template;
+
+    for (Map.Entry<String, Object> entry : ctx.entrySet()) {
+      String placeholder = "{{" + entry.getKey() + "}}";
+      String value = entry.getValue() == null ? "" : entry.getValue().toString();
+      result = result.replace(placeholder, value);
+    }
+
+    return result;
   }
 }
