@@ -2,8 +2,8 @@ package org.example.gateway.controller;
 
 
 import org.example.gateway.service.WidgetService;
-import org.example.shared.models.Platform;
-import org.example.shared.models.WidgetResponse;
+import org.example.shared.models.widgets.Platform;
+import org.example.shared.models.widgets.WidgetResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
