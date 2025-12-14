@@ -1,122 +1,141 @@
 product: insurance
+
 widgets:
   # Widget 1: Complete Insurance Quote
   - id: insurance-quote-completion
     name: "Complete Your Insurance Quote"
+
+    componentType: banner
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - INSURANCE_QUOTE
+      eventTypes: [INSURANCE_QUOTE]
       conditions: []
-    personalization:
-      titleTemplate: "Complete Your {{type}} Insurance"
-      subtitleTemplate: "Your quote expires in 24 hours"
-      ctaLabel: "Complete Now"
-      ctaUrl: "/insurance/complete/{{quoteId}}"
-    componentType: "banner"
+
+    contentTemplate:
+      title: "Complete Your {{type}} Insurance"
+      subtitle: "Your quote expires in 24 hours"
+      imageUrl: "{{heroImageUrl}}"
+      cta:
+        label: "Complete Now"
+        url: "/insurance/complete/{{quoteId}}"
+
     priority: 12
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 7200
 
-  # Widget 2: Travel Insurance Cross-Sell (Flight → Insurance)
+
+  # Widget 2: Travel Insurance Cross-Sell
   - id: travel-insurance-cross-sell
     name: "Travel Insurance Cross-Sell"
+
+    componentType: card
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - FLIGHT_SEARCH
-        - FLIGHT_BOOKED
+      eventTypes: [FLIGHT_SEARCH, FLIGHT_BOOKED]
       conditions: []
-    personalization:
-      titleTemplate: "Travel Insurance for {{to}}"
-      subtitleTemplate: "Protect your vacation from €8"
-      ctaLabel: "Compare Offers"
-      ctaUrl: "/insurance/travel?destination={{to}}"
-    componentType: "card"
+
+    contentTemplate:
+      title: "Travel Insurance for {{to}}"
+      subtitle: "Protect your vacation from €8"
+      cta:
+        label: "Compare Offers"
+        url: "/insurance/travel?destination={{to}}"
+
     priority: 8
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 3600
+
 
   # Widget 3: Car Insurance
   - id: car-insurance-comparison
     name: "Car Insurance Comparison"
+
+    componentType: card
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - HOME_VISIT
+      eventTypes: [HOME_VISIT]
       conditions: []
-    personalization:
-      titleTemplate: "Compare Car Insurance"
-      subtitleTemplate: "Save up to €850 - Over 300 rates"
-      ctaLabel: "Compare Now"
-      ctaUrl: "/insurance/car"
-    componentType: "card"
+
+    contentTemplate:
+      title: "Compare Car Insurance"
+      subtitle: "Save up to €850 - Over 300 rates"
+      cta:
+        label: "Compare Now"
+        url: "/insurance/car"
+
     priority: 7
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 86400
+
 
   # Widget 4: Health Insurance
   - id: health-insurance-comparison
     name: "Health Insurance Comparison"
+
+    componentType: card
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - HOME_VISIT
+      eventTypes: [HOME_VISIT]
       conditions: []
-    personalization:
-      titleTemplate: "Switch Health Insurance"
-      subtitleTemplate: "Find the best insurance for you"
-      ctaLabel: "Compare Rates"
-      ctaUrl: "/insurance/health"
-    componentType: "card"
+
+    contentTemplate:
+      title: "Switch Health Insurance"
+      subtitle: "Find the best insurance for you"
+      cta:
+        label: "Compare Rates"
+        url: "/insurance/health"
+
     priority: 6
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 86400
+
 
   # Widget 5: Policy Status Tracker
   - id: insurance-policy-status
     name: "Insurance Policy Status"
+
+    componentType: card
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - CONTRACT_SIGNED
+      eventTypes: [CONTRACT_SIGNED]
       conditions: []
-    personalization:
-      titleTemplate: "Your {{type}} Insurance"
-      subtitleTemplate: "Policy {{contractId}} - Active"
-      ctaLabel: "View Details"
-      ctaUrl: "/insurance/policy/{{contractId}}"
-    componentType: "card"
+
+    contentTemplate:
+      title: "Your {{type}} Insurance"
+      subtitle: "Policy {{contractId}} - Active"
+      cta:
+        label: "View Details"
+        url: "/insurance/policy/{{contractId}}"
+
     priority: 15
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 2592000
+
 
   # Widget 6: Insurance Renewal Reminder
   - id: insurance-renewal-reminder
     name: "Insurance Renewal Reminder"
+
+    componentType: banner
+    schemaVersion: v1
+
     trigger:
-      eventTypes:
-        - CONTRACT_SIGNED
+      eventTypes: [CONTRACT_SIGNED]
       conditions: []
-    personalization:
-      titleTemplate: "Insurance Expiring Soon"
-      subtitleTemplate: "{{type}} expires on {{expiryDate}}"
-      ctaLabel: "Renew Now"
-      ctaUrl: "/insurance/renew/{{contractId}}"
-    componentType: "banner"
+
+    contentTemplate:
+      title: "Insurance Expiring Soon"
+      subtitle: "{{type}} expires on {{expiryDate}}"
+      imageUrl: "{{heroImageUrl}}"
+      cta:
+        label: "Renew Now"
+        url: "/insurance/renew/{{contractId}}"
+
     priority: 14
-    platformVisibility:
-      - WEB
-      - ANDROID
-      - IOS
+    platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 86400
