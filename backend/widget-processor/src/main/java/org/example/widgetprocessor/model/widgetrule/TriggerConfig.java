@@ -1,22 +1,19 @@
 package org.example.widgetprocessor.model.widgetrule;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.example.widgetprocessor.model.userevent.EventType;
-
 import java.util.List;
 
 public class TriggerConfig {
 
-    private List<EventType> eventTypes;
+    private List<String> eventTypes;
     private List<String> conditions;
 
     public TriggerConfig() {}
 
-    public List<EventType> getEventTypes() {
+    public List<String> getEventTypes() {
         return eventTypes;
     }
 
-    public void setEventTypes(List<EventType> eventTypes) {
+    public void setEventTypes(List<String> eventTypes) {
         this.eventTypes = eventTypes;
     }
 

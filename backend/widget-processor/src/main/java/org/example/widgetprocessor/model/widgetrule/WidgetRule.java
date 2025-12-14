@@ -1,7 +1,7 @@
 package org.example.widgetprocessor.model.widgetrule;
 
 
-import org.example.shared.models.Platform;
+import org.example.shared.models.widgets.Platform;
 
 import java.util.List;
 import java.util.Map;
@@ -10,23 +10,23 @@ public class WidgetRule {
 
     private String id;
     private String name;
+    private String schemaVersion;
 
     private String productId;   // set by RuleLoader (file name)
 
     private TriggerConfig trigger;
-    private PersonalizationConfig personalization;
 
     private String componentType;
+
+    private Map<String, Object> layoutConfig;
+    private Map<String, Object> contentTemplate;
+    private RuleAction action = RuleAction.ADD_WIDGET;
+
     private int priority;
     private List<Platform> platformVisibility;
     private int ttlSeconds;
 
-    private Map<String, Object> layoutConfig;
-
-    private RuleAction action = RuleAction.ADD_WIDGET;
-
-
-    public WidgetRule() {}
+  public WidgetRule() {}
 
 
     public String getId() {
@@ -61,13 +61,6 @@ public class WidgetRule {
         this.trigger = trigger;
     }
 
-    public PersonalizationConfig getPersonalization() {
-        return personalization;
-    }
-
-    public void setPersonalization(PersonalizationConfig personalization) {
-        this.personalization = personalization;
-    }
 
     public String getComponentType() {
         return componentType;
@@ -116,4 +109,20 @@ public class WidgetRule {
     public void setAction(RuleAction action) {
         this.action = action;
     }
+
+  public Map<String, Object> getContentTemplate() {
+    return contentTemplate;
+  }
+
+  public void setContentTemplate(Map<String, Object> contentTemplate) {
+    this.contentTemplate = contentTemplate;
+  }
+
+  public String getSchemaVersion() {
+    return schemaVersion;
+  }
+
+  public void setSchemaVersion(String schemaVersion) {
+    this.schemaVersion = schemaVersion;
+  }
 }
