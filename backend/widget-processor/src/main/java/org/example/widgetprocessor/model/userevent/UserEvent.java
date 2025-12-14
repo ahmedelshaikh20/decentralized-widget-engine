@@ -7,7 +7,7 @@ import java.util.Map;
 public class UserEvent {
 
     private String userId;
-    private EventType eventType;
+    private String eventType;
     private String productId;
     private Map<String, Object> metadata;
     private long timestamp;
@@ -16,7 +16,7 @@ public class UserEvent {
         // default constructor for Jackson
     }
 
-    public UserEvent(String userId, EventType eventType, String productId, Map<String, Object> metadata, long timestamp) {
+    public UserEvent(String userId, String eventType, String productId, Map<String, Object> metadata, long timestamp) {
         this.userId = userId;
         this.eventType = eventType;
         this.productId = productId;
@@ -32,11 +32,11 @@ public class UserEvent {
         this.userId = userId;
     }
 
-    public EventType getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
