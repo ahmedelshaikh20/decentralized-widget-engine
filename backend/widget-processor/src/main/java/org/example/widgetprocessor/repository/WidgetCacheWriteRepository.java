@@ -1,7 +1,7 @@
 package org.example.widgetprocessor.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.shared.models.WidgetCacheDto;
+import org.example.shared.models.widgets.WidgetCacheDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
