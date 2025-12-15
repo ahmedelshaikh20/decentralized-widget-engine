@@ -33,7 +33,7 @@ public class UserEventProcessor {
     String userId = event.getUserId();
     storeEventHistory(event);
     var history = userHistoryRepository.getLastEvents(userId);
-    var rules = ruleEngine.calculateEligibleWidgets(event, history);
+    var rules = ruleEngine.calculateEligibleWidgets(event);
 
     if (rules.isEmpty()) return;
     var lastMeta = userHistoryRepository.getLastMetadata(userId, event.getEventType());
