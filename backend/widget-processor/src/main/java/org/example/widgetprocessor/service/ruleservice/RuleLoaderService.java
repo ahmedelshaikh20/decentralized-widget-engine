@@ -80,7 +80,6 @@ public class RuleLoaderService {
 
     } catch (IOException e) {
       log.error("Error during rule loading", e);
-      throw new RuntimeException("Failed loading rules", e);
     }
   }
 
