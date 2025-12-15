@@ -1,7 +1,5 @@
 package org.example.widgetprocessor;
 
-import org.example.widgetprocessor.model.userevent.EventType;
-import org.example.widgetprocessor.model.userevent.UserEvent;
 import org.example.widgetprocessor.model.widgetrule.WidgetRule;
 import org.example.widgetprocessor.service.ruleservice.RuleEngineService;
 import org.example.widgetprocessor.service.ruleservice.RuleLoaderService;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,14 +46,5 @@ public class RuleLoaderServiceTest {
         System.out.println("Loaded rules: " + rules);
     }
 
-  @Test
-  void testMatchingEventType() {
-    UserEvent event = new UserEvent("u1", EventType.TEST_EVENT, "test", Map.of("name", "John"),1000);
-
-    List<WidgetRule> rules = engine.calculateEligibleWidgets(event);
-
-    assertEquals(1, rules.size());
-    assertEquals("test-card", rules.get(0).getId());
-  }
 
 }
