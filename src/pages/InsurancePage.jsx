@@ -49,10 +49,10 @@ export default function InsurancePage() {
   const triggerCompare = async () => {
     setLoading(true);
     try {
-      await insuranceService.compare(API_CONFIG.USER_ID);
+      await insuranceService.signContract(API_CONFIG.USER_ID);
       setTimeout(() => window.location.reload(), 500);
     } catch (error) {
-      console.error("Compare failed:", error);
+      console.error("Sign contract failed:", error);
       setLoading(false);
     }
   };
@@ -60,13 +60,26 @@ export default function InsurancePage() {
   const triggerPurchase = async () => {
     setLoading(true);
     try {
-      await insuranceService.purchase(API_CONFIG.USER_ID);
+      await insuranceService.createQuote(API_CONFIG.USER_ID);
       setTimeout(() => window.location.reload(), 500);
     } catch (error) {
-      console.error("Purchase failed:", error);
+      console.error("Create quote failed:", error);
       setLoading(false);
     }
   };
+
+  // add this in InsurancePage
+const triggerHomeVisit = async () => {
+  setLoading(true);
+  try {
+    await insuranceService.homeVisit(API_CONFIG.USER_ID);
+    setTimeout(() => window.location.reload(), 500);
+  } catch (error) {
+    console.error("Home visit failed:", error);
+    setLoading(false);
+  }
+};
+
 
   return (
     <div style={{
@@ -117,6 +130,15 @@ export default function InsurancePage() {
 
         {/* Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* add this button in the Buttons section (above/below others) */}
+          <InsuranceButton
+            onClick={triggerHomeVisit}
+            disabled={loading}
+            icon="🏠"
+            label="Simulate Home Visit"
+            variant="blue"
+          />
+
           <InsuranceButton
             onClick={triggerCompare}
             disabled={loading}

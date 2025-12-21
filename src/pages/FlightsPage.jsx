@@ -61,6 +61,16 @@ export default function FlightsPage() {
       setLoading(false);
     }
   };
+  const triggerHomeVisit = async () => {
+  setLoading(true);
+  try {
+    await flightProductService.homeVisit(API_CONFIG.USER_ID);
+    setTimeout(() => window.location.reload(), 500);
+  } catch (error) {
+    console.error("Home visit failed:", error);
+    setLoading(false);
+  }
+};
 
   const triggerBooking = async () => {
     setLoading(true);
@@ -122,6 +132,14 @@ export default function FlightsPage() {
 
         {/* Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+<ActionButton
+  onClick={triggerHomeVisit}
+  disabled={loading}
+  icon="🏠"
+  label="Simulate Home Visit"
+  variant="blue"
+/>
+
           <ActionButton
             onClick={triggerSearch}
             disabled={loading}
@@ -138,7 +156,6 @@ export default function FlightsPage() {
           />
         </div>
 
-        {/* Loading */}
         {loading && (
           <div style={{
             marginTop: '1.5rem',
