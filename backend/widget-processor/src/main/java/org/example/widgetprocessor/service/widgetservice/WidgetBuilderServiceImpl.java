@@ -36,12 +36,13 @@ public class WidgetBuilderServiceImpl implements WidgetBuilderService {
 
     // ---------------- Build Payload ----------------
     WidgetPayload payload = buildPayload(rule, context);
+    int finalPriority = calculateFinalPriority(rule, event, history);
 
     return new WidgetCacheDto(
       rule.getId(),
       rule.getProductId(),
       rule.getComponentType(),
-      rule.getPriority(),
+      finalPriority,
       rule.getPlatformVisibility(),
       rule.getTtlSeconds(),
       payload
@@ -82,9 +83,18 @@ public class WidgetBuilderServiceImpl implements WidgetBuilderService {
       Object value = entry.getValue();
 
       if (value instanceof String str) {
-        result.put(entry.getKey(), renderTemplate(str, ctx));
 
-      } else if (value instanceof Map<?, ?> map) {
+        // CASE 1: pure placeholder → return object as-is
+        if (str.matches("^\\{\\{\\w+}}$")) {
+          String key = str.substring(2, str.length() - 2);
+          result.put(entry.getKey(), ctx.get(key));
+        }
+        // CASE 2: mixed string → interpolate
+        else {
+          result.put(entry.getKey(), renderTemplate(str, ctx));
+        }
+      }
+      else if (value instanceof Map<?, ?> map) {
         result.put(
           entry.getKey(),
           renderTemplateMap((Map<String, Object>) map, ctx)
@@ -120,6 +130,27 @@ public class WidgetBuilderServiceImpl implements WidgetBuilderService {
       }
     }).toList();
   }
+
+  private int calculateFinalPriority(
+    WidgetRule rule,
+    UserEvent event,
+    List<Map<String, Object>> history
+  ) {
+    int priority = rule.getPriority();
+
+    //  Personalized event → BIG boost
+    if (event.getMetadata() != null && !event.getMetadata().isEmpty()) {
+      priority += 1000;
+    }
+
+    // ️Recent user activity → small boost
+    if (history != null) {
+      priority += history.size() * 10;
+    }
+
+    return priority;
+  }
+
 
   // =========================================================
   // Simple String Template Engine
