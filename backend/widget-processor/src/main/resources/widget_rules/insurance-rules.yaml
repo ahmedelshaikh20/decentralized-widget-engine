@@ -15,7 +15,7 @@ widgets:
     contentTemplate:
       title: "Complete Your {{type}} Insurance"
       subtitle: "Your quote expires in 24 hours"
-      imageUrl: "{{heroImageUrl}}"
+      imageUrl: "{{imageUrl}}"
       cta:
         label: "Complete Now"
         url: "/insurance/complete/{{quoteId}}"
@@ -131,7 +131,7 @@ widgets:
     contentTemplate:
       title: "Insurance Expiring Soon"
       subtitle: "{{type}} expires on {{expiryDate}}"
-      imageUrl: "{{heroImageUrl}}"
+      imageUrl: "{{imageUrl}}"
       cta:
         label: "Renew Now"
         url: "/insurance/renew/{{contractId}}"

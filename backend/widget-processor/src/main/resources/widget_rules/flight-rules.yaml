@@ -23,7 +23,7 @@ widgets:
         label: "Book Now"
         url: "/flight/search?from={{from}}&to={{to}}"
 
-    priority: 10
+    priority: 13
     platformVisibility: [WEB, ANDROID, IOS]
     ttlSeconds: 3600
 
@@ -47,7 +47,7 @@ widgets:
         url: "/flight/booking/{{bookingId}}"
 
     priority: 15
-    platformVisibility: [ANDROID, IOS]
+    platformVisibility: [ANDROID, IOS ,WEB]
     ttlSeconds: 86400
 
 
@@ -65,7 +65,7 @@ widgets:
     contentTemplate:
       title: "Discover Popular Destinations"
       subtitle: "Cheap flights to top destinations"
-      imageUrl: "{{heroImageUrl}}"
+      imageUrl: "{{imageUrl}}"
       cta:
         label: "View All Deals"
         url: "/flight/deals"
@@ -112,7 +112,7 @@ widgets:
     contentTemplate:
       title: "Last Minute to {{to}}"
       subtitle: "Save now - Departure within 7 days"
-      imageUrl: "{{heroImageUrl}}"
+      imageUrl: "{{imageUrl}}"
       cta:
         label: "Last Minute Offers"
         url: "/flight/last-minute?to={{to}}"
