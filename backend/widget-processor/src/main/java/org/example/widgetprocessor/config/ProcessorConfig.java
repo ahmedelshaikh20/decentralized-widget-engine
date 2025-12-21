@@ -12,8 +12,6 @@ public class ProcessorConfig {
   private Map<String, StreamProperties> streams;
   private RetryProperties retry;
 
-  // ===== Getters & Setters =====
-
   public Map<String, StreamProperties> getStreams() {
     return streams;
   }
@@ -30,7 +28,7 @@ public class ProcessorConfig {
     this.retry = retry;
   }
 
-  // ===== Nested Classes =====
+
 
   public static class StreamProperties {
 

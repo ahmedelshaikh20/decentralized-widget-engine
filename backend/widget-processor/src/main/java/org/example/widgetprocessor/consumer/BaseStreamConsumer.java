@@ -185,9 +185,5 @@ public abstract class BaseStreamConsumer {
         public PermanentException(String message) {
             super(message);
         }
-
-        public PermanentException(String message, Throwable cause) {
-            super(message, cause);
-        }
     }
 }

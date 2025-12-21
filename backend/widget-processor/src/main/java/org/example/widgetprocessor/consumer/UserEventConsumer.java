@@ -54,17 +54,15 @@ public class UserEventConsumer extends BaseStreamConsumer {
   @Override
   protected void handleRecord(MapRecord<String, Object, Object> record) throws Exception {
     UserEvent event = convertToUserEvent(record);
-
-    log.debug("Processing user event: userId={}, type={}, product={}",
-      event.getUserId(), event.getEventType(), event.getProductId());
-
     userEventProcessor.processEvent(event);
   }
 
   private UserEvent convertToUserEvent(MapRecord<String, Object, Object> record) throws PermanentException {
+
     String userId = str(record, "userId");
     String eventType = str(record, "eventType");
     String productId = str(record, "productId");
+
 
     // Validation
     if (userId == null || userId.isBlank()) {
