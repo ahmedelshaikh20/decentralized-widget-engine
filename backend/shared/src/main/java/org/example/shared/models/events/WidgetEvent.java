@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-public record WidgetEvent(String userId, String widgetId, String widgetType, WidgetEventType actionType,
-                          Map<String, Object> metadata) {
+public record WidgetEvent(String userId, String widgetId, String widgetType, WidgetEventType actionType, Map<String, Object> metadata) {
 
   @JsonCreator
   public WidgetEvent(
