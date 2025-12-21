@@ -1,20 +1,27 @@
 import { API_CONFIG } from "../utils/constants";
 
-// To Complete Later: Add Proper Response in the Server
 export const insuranceService = {
-  async compare(userId) {
-    return await fetch(`http://localhost:9002/api/insurance/compare`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId })
+  async homeVisit(userId) {
+    return fetch(`${API_CONFIG.INSURANCE_API}/home`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
     });
   },
 
-  async purchase(userId) {
-    return await fetch(`http://localhost:9002/api/insurance/purchase`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId })
+  async createQuote(userId, type = 'health') {
+    return fetch(`${API_CONFIG.INSURANCE_API}/quote`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, type }),
     });
-  }
+  },
+
+  async signContract(userId, type = 'health') {
+    return fetch(`${API_CONFIG.INSURANCE_API}/contract/sign`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, type }),
+    });
+  },
 };
