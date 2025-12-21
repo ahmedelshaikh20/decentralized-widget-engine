@@ -41,6 +41,7 @@ public class UserHistoryRepository {
     } catch (Exception ignored) {}
   }
 
+  // Retrieve last 10 events
   public List<Map<String, Object>> getLastEvents(String userId) {
     String key = "user-history:" + userId;
 
@@ -49,7 +50,8 @@ public class UserHistoryRepository {
 
     return rawMap.stream().map(r -> {
       try {
-        return mapper.readValue(r, new TypeReference<>() {});
+        return mapper.readValue(r, new TypeReference<>() {
+        });
       } catch (Exception ignored) {
         return Map.<String, Object>of();
       }

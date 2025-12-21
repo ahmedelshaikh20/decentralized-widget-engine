@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,10 +24,16 @@ public class RuleEngineService {
    * Main rule evaluation entrypoint.
    */
   public List<WidgetRule> calculateEligibleWidgets(UserEvent event) {
-    return ruleLoader.getAllRules().stream()
+
+    List<WidgetRule> matched = ruleLoader.getAllRules().stream()
+      .filter(rule -> rule.getProductId().equals(event.getProductId()))
       .filter(rule -> matchesEventType(rule, event))
+      .sorted((a, b) -> Integer.compare(b.getPriority(), a.getPriority()))
       .collect(Collectors.toList());
+
+    return matched;
   }
+
 
   /**
    * Rule only triggers if eventType is part of rule.trigger.eventTypes.
