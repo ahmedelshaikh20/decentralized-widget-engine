@@ -1,0 +1,122 @@
+product: flight
+
+widgets:
+  # Widget 1: Flight Search Deals
+  - id: flight-deals
+    name: "Personalized Flight Deals"
+
+    componentType: carousel
+    schemaVersion: v1
+
+    trigger:
+      eventTypes: [FLIGHT_SEARCH]
+      conditions: []
+
+    layoutConfig:
+      itemsPerViewport: 1.2
+
+    contentTemplate:
+      title: "Cheap Flights to {{to}}"
+      subtitle: "From €{{minPrice}} - Based on your search"
+      items: "{{deals}}"
+      cta:
+        label: "Book Now"
+        url: "/flight/search?from={{from}}&to={{to}}"
+
+    priority: 13
+    platformVisibility: [WEB, ANDROID, IOS]
+    ttlSeconds: 3600
+
+
+  # Widget 2: Flight Booking Status
+  - id: flight-booking-status
+    name: "Active Flight Booking Status"
+
+    componentType: card
+    schemaVersion: v1
+
+    trigger:
+      eventTypes: [FLIGHT_BOOKED]
+      conditions: []
+
+    contentTemplate:
+      title: "Your Flight to {{to}}"
+      subtitle: "Flight {{flightNumber}} - Departure {{departureDate}}"
+      cta:
+        label: "View Details"
+        url: "/flight/booking/{{bookingId}}"
+
+    priority: 15
+    platformVisibility: [ANDROID, IOS ,WEB]
+    ttlSeconds: 86400
+
+
+  # Widget 3: Popular Destinations
+  - id: flight-popular-destinations
+    name: "Popular Flight Destinations"
+
+    componentType: banner
+    schemaVersion: v1
+
+    trigger:
+      eventTypes: [HOME_VISIT]
+      conditions: []
+
+    contentTemplate:
+      title: "Discover Popular Destinations"
+      subtitle: "Cheap flights to top destinations"
+      imageUrl: "{{imageUrl}}"
+      cta:
+        label: "View All Deals"
+        url: "/flight/deals"
+
+    priority: 5
+    platformVisibility: [WEB, ANDROID, IOS]
+    ttlSeconds: 7200
+
+
+  # Widget 4: Weekend Trips
+  - id: flight-weekend-trips
+    name: "Weekend Flight Deals"
+
+    componentType: card
+    schemaVersion: v1
+
+    trigger:
+      eventTypes: [FLIGHT_SEARCH]
+      conditions: []
+
+    contentTemplate:
+      title: "Weekend Getaways"
+      subtitle: "Spontaneous travel from €{{minPrice}}"
+      cta:
+        label: "Weekend Trips"
+        url: "/flight/weekend-deals"
+
+    priority: 8
+    platformVisibility: [WEB, ANDROID, IOS]
+    ttlSeconds: 3600
+
+
+  # Widget 5: Last Minute Deals
+  - id: flight-last-minute
+    name: "Last Minute Flight Deals"
+
+    componentType: banner
+    schemaVersion: v1
+
+    trigger:
+      eventTypes: [FLIGHT_SEARCH]
+      conditions: []
+
+    contentTemplate:
+      title: "Last Minute to {{to}}"
+      subtitle: "Save now - Departure within 7 days"
+      imageUrl: "{{imageUrl}}"
+      cta:
+        label: "Last Minute Offers"
+        url: "/flight/last-minute?to={{to}}"
+
+    priority: 12
+    platformVisibility: [WEB, ANDROID, IOS]
+    ttlSeconds: 1800

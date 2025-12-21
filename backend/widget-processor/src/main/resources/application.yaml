@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: widget-processor
+
+  main:
+    web-application-type: none
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 50
+          max-idle: 20
+          min-idle: 5
+          max-wait: 100ms
+
+processor:
+
+  # =========================
+  # Redis Streams
+  # =========================
+  streams:
+
+    user-events:
+      key: user-events
+      consumer-group: widget-processor-group
+      consumer-name: processor-${random.uuid}
+      batch-size: 20
+      poll-interval-ms: 100
+      block-ms: 1000
+
+    widget-events:
+      key: widget-events
+      consumer-group: widget-analytics-group
+      consumer-name: analytics-${random.uuid}
+      batch-size: 50
+      poll-interval-ms: 500
+      block-ms: 500
+
+  # =========================
+  # Cache
+  # =========================
+  cache:
+    default-ttl-seconds: 3600
+    max-widgets-per-user: 5
+
+  # =========================
+  # Rules
+  # =========================
+  rules:
+    directory: classpath:widget_rules/
+
+  # =========================
+  # Retry / Resilience
+  # =========================
+  retry:
+    max-attempts: 3
+    backoff-ms: 1000
+
+# =========================
+# AI / External Services
+# =========================
+deepseek:
+  api-key: ${DEEPSEEK_API_KEY}
