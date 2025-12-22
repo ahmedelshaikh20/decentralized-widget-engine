@@ -5,31 +5,47 @@ services:
   redis:
     image: redis:7-alpine
     container_name: widget-redis
-    volumes:
-      - redis-data:/data
+    ports:
+      - "6379:6379"
 
   widget-processor:
-    image: widget-processor
+    build: ./backend/widget-processor
     container_name: widget-processor
     depends_on:
       - redis
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
-    restart: unless-stopped
 
   widget-gateway:
-    image: widget-gateway
+    build: ./backend/widget-gateway
     container_name: widget-gateway
-    depends_on:
-      - redis
     ports:
       - "8083:8083"
+    depends_on:
+      - redis
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-    restart: unless-stopped
+
+  mock-products:
+    build: ./mock-products
+    container_name: mock-products
+    ports:
+      - "9001:9001"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - widget-gateway
 
 volumes:
   redis-data:
