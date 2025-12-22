@@ -11,8 +11,8 @@ export const USER_CONTEXT = getUserFromUrl();
 
 export const API_CONFIG = {
   BASE_URL: 'http://165.22.27.127:8083/api/v1',
-  FLIGHT_API: 'http://localhost:9001/api/flight',
-  INSURANCE_API: 'http://localhost:9001/api/insurance',
+  FLIGHT_API: 'http://165.22.27.127:9001/api/flight',
+  INSURANCE_API: 'http://165.22.27.127:9001/api/insurance',
   USER_ID: USER_CONTEXT.userId,
   PLATFORM: 'WEB',
 };
