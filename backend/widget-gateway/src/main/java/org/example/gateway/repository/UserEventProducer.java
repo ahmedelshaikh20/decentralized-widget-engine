@@ -6,8 +6,6 @@ import org.springframework.data.redis.connection.stream.StreamRecords;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.stereotype.Component;
-
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
