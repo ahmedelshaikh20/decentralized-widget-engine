@@ -1,51 +1,46 @@
 version: "3.9"
 
 services:
-
   redis:
     image: redis:7-alpine
     container_name: widget-redis
-    ports:
-      - "6379:6379"
 
   widget-processor:
-    build: ./backend/widget-processor
+    build:
+      context: ./backend
+      dockerfile: widget-processor/Dockerfile
     container_name: widget-processor
-    depends_on:
-      - redis
     environment:
       REDIS_HOST: redis
-      REDIS_PORT: 6379
+    depends_on:
+      - redis
 
   widget-gateway:
-    build: ./backend/widget-gateway
+    build:
+      context: ./backend
+      dockerfile: widget-gateway/Dockerfile
     container_name: widget-gateway
     ports:
       - "8083:8083"
-    depends_on:
-      - redis
     environment:
       REDIS_HOST: redis
-      REDIS_PORT: 6379
+    depends_on:
+      - redis
 
   mock-products:
-    build: ./mock-products/flight-service
+    build:
+      context: ./mock-products/flight-service
     container_name: mock-products
     ports:
       - "9001:9001"
-    depends_on:
-      - redis
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
     container_name: frontend
     ports:
       - "80:80"
-    depends_on:
-      - widget-gateway
+
 
 volumes:
   redis-data:

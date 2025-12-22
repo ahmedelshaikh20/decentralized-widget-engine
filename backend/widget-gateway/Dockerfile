@@ -1,21 +1,17 @@
-# ---- Build stage ----
-FROM gradle:8.7-jdk17 AS builder
-WORKDIR /app
+FROM gradle:8.14-jdk17 AS builder
 
-# Copy entire backend (safe for multi-module Gradle)
-COPY . .
+WORKDIR /workspace
 
-# Build only widget-gateway
-RUN ./gradlew :widget-gateway:build -x test --no-daemon
+COPY settings.gradle build.gradle ./
+COPY shared ./shared
+COPY widget-gateway ./widget-gateway
 
+RUN gradle :widget-gateway:bootJar -x test --no-daemon
 
-# ---- Run stage ----
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy the fat jar
-COPY --from=builder /app/widget-gateway/build/libs/*.jar app.jar
+COPY --from=builder /workspace/widget-gateway/build/libs/*.jar app.jar
 
 EXPOSE 8083
-
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
