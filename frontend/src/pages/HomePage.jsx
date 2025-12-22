@@ -2,16 +2,20 @@ import React from 'react';
 import WidgetRenderer from '../components/widgets/WidgetRenderer';
 import useWidgets from '../hooks/useWidgets';
 import WidgetSkeleton from '../components/widgets/WidgetSkeleton';
-import { API_CONFIG } from '../utils/constants';
+import { API_CONFIG ,getUserFromUrl  } from '../utils/constants';
 
-// Utility function for greeting
-const getGreeting = () => {
+const getGreeting = (userName)=> {
   const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return 'Guten Morgen 🌅';
-  if (hour >= 12 && hour < 17) return 'Guten Tag ☀️';
-  if (hour >= 17 && hour < 22) return 'Guten Abend 🌙';
-  return 'Willkommen 👋';
+  const name = userName ? `, ${userName}` : '';
+
+  if (hour >= 5 && hour < 12) return `Guten Morgen${name} 🌅`;
+  if (hour >= 12 && hour < 17) return `Guten Tag${name} ☀️`;
+  if (hour >= 17 && hour < 22) return `Guten Abend${name} 🌙`;
+  return `Willkommen${name} 👋`;
 };
+
+const { userId, userName } = getUserFromUrl();
+
 
 // Reset Button Component
 const ResetButton = ({ onClick }) => (
@@ -33,7 +37,7 @@ const ResetButton = ({ onClick }) => (
     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
   >
-    Reset Widgets 🔄
+    Reset Widgets 
   </button>
 );
 
@@ -52,7 +56,7 @@ const PageHeader = ({ onReset }) => (
       color: '#1f2937',
       margin: 0
     }}>
-      {getGreeting()}
+      {getGreeting(userName)}
     </h1>
     <ResetButton onClick={onReset} />
   </div>
@@ -140,7 +144,7 @@ export const HomePage = () => {
   const handleResetWidgets = async () => {
     try {
       await fetch(
-       `${API_CONFIG.BASE_URL}/reset?userId=${API_CONFIG.USER_ID}`,
+       `${API_CONFIG.BASE_URL}/reset?userId=${userId}`,
         { method: 'POST' }
       );
       window.location.reload();

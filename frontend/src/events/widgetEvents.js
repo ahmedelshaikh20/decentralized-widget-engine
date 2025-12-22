@@ -10,7 +10,7 @@ export function emitWidgetEvent({
     userId: API_CONFIG.USER_ID,
     widgetId,
     widgetType,
-    actionType, // CLICK | VIEW
+    actionType, 
     metadata
   };
 
