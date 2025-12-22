@@ -14,4 +14,4 @@ COPY . .
 ENV PORT=9001
 EXPOSE 9001
 
-CMD ["node", "src/index.js"]
+CMD ["node", "src/server.js"]

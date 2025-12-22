@@ -31,6 +31,7 @@ services:
   mock-products:
     build:
       context: ./mock-products/flight-service
+      dockerfile: Dockerfile
     container_name: mock-products
     ports:
       - "9001:9001"
