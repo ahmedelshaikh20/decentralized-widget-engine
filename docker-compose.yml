@@ -12,6 +12,7 @@ services:
     container_name: widget-processor
     environment:
       REDIS_HOST: redis
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
     depends_on:
       - redis
 
