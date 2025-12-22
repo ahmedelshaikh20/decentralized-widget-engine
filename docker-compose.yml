@@ -29,7 +29,7 @@ services:
       REDIS_PORT: 6379
 
   mock-products:
-    build: ./mock-products
+    build: ./mock-products/flight-service
     container_name: mock-products
     ports:
       - "9001:9001"
