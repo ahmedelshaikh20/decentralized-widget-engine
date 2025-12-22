@@ -16,46 +16,30 @@ public class WidgetCacheRepository {
 
   private final StringRedisTemplate redis;
   private final ObjectMapper mapper;
-
+  private static final String DEFAULTS_KEY = "widgets:defaults";
   public WidgetCacheRepository(StringRedisTemplate redis, ObjectMapper mapper) {
     this.redis = redis;
     this.mapper = mapper;
   }
 
-  private String indexKey(String userId) {
-    return "widgets:" + userId + ":index";
+
+  private String widgetHashKey(String userId) {
+    return "widgets:" + userId + ":hash";
   }
 
-  private String widgetKey(String userId, String widgetId) {
-    return "widgets:" + userId + ":" + widgetId;
+  private String widgetExpKey(String userId) {
+    return "widgets:" + userId + ":exp";
   }
+
 
   public List<WidgetCacheDto> getWidgetsMerged(String userId) {
-    List<WidgetCacheDto> personalized = new ArrayList<>();
-    List<WidgetCacheDto> defaults = new ArrayList<>();
+    purgeExpired(userId);
 
-    // 1. Load personalized widgets
-    Set<String> ids = redis.opsForSet().members(indexKey(userId));
-    if (ids != null) {
-      ids.forEach(id -> {
-        String json = redis.opsForValue().get(widgetKey(userId, id));
-        if (json != null) {
-          try {
-            personalized.add(mapper.readValue(json, WidgetCacheDto.class));
-          } catch (Exception ignored) {}
-        }
-      });
-    }
+    List<WidgetCacheDto> personalized = loadPersonalized(userId);
 
-    // 2. Load default widgets
-    String defaultJson = redis.opsForValue().get("widgets:defaults");
-    if (defaultJson != null) {
-      try {
-        defaults = mapper.readValue(defaultJson, new TypeReference<List<WidgetCacheDto>>(){});
-      } catch (Exception ignored) {}
-    }
+    List<WidgetCacheDto> defaults = loadDefaults();
 
-    // 3. Remove defaults that are overridden by personalized (same widget id)
+    // 3) Remove defaults overridden by personalized (same widget id)
     Set<String> personalIds = personalized.stream()
       .map(WidgetCacheDto::id)
       .collect(Collectors.toSet());
@@ -64,28 +48,58 @@ public class WidgetCacheRepository {
       .filter(d -> !personalIds.contains(d.id()))
       .toList();
 
-    // 4. Merge → personalized FIRST, defaults AFTER
-    List<WidgetCacheDto> merged = new ArrayList<>();
+    // 4) Merge → personalized FIRST, defaults AFTER
+    List<WidgetCacheDto> merged = new ArrayList<>(personalized.size() + filteredDefaults.size());
     merged.addAll(personalized);
     merged.addAll(filteredDefaults);
-
-    System.out.println(merged.stream().map(WidgetCacheDto::id).collect(Collectors.joining(",")));
 
     return merged;
   }
 
 
+  private List<WidgetCacheDto> loadPersonalized(String userId) {
+    List<Object> raw = redis.opsForHash().values(widgetHashKey(userId)); // HVALS
+    if (raw == null || raw.isEmpty()) return List.of();
 
-  public void deleteWidgetsForUser(String userId) {
-    String indexKey = indexKey(userId);
-    Set<String> ids = redis.opsForSet().members(indexKey);
-
-    if (ids != null && !ids.isEmpty()) {
-      ids.forEach(id -> redis.delete(widgetKey(userId, id)));
+    List<WidgetCacheDto> result = new ArrayList<>(raw.size());
+    for (Object obj : raw) {
+      if (obj == null) continue;
+      String json = obj.toString();
+      try {
+        result.add(mapper.readValue(json, WidgetCacheDto.class));
+      } catch (Exception ignored) {}
     }
-    redis.delete(indexKey);
-    System.out.println("Cleared personalization for user: " + userId);
+    return result;
   }
 
+  private List<WidgetCacheDto> loadDefaults() {
+    String defaultJson = redis.opsForValue().get(DEFAULTS_KEY);
+    if (defaultJson == null || defaultJson.isBlank()) return List.of();
+    try {
+      return mapper.readValue(defaultJson, new TypeReference<List<WidgetCacheDto>>() {});
+    } catch (Exception ignored) {
+      return List.of();
+    }
+  }
+
+  // remove expired widgets
+  private void purgeExpired(String userId) {
+    long now = System.currentTimeMillis();
+    String expKey = widgetExpKey(userId);
+    String hashKey = widgetHashKey(userId);
+
+    Set<String> expiredIds = redis.opsForZSet().rangeByScore(expKey, 0, now);
+    if (expiredIds == null || expiredIds.isEmpty()) return;
+
+    redis.opsForHash().delete(hashKey, expiredIds.toArray());
+    redis.opsForZSet().remove(expKey, expiredIds.toArray());
+  }
+
+
+
+  public void deleteWidgetsForUser(String userId) {
+    redis.delete(widgetHashKey(userId));
+    redis.delete(widgetExpKey(userId));
+  }
 
 }
