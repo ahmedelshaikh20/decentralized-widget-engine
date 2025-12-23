@@ -259,7 +259,15 @@ If widgets don't appear:
 
 ## 8) Operational Expectations (Production)
 
-###  Rollout strategy
+### 8.1 Safety limits (recommended)
+
+Core may enforce:
+
+- max widgets per user (e.g., 50)
+- max widgets per product per user (e.g., 5)
+- allowlist for metadata keys
+
+### 8.2 Rollout strategy
 
 - Start with v1 schemas and a small set of component types.
 - Add new widget variants via rule updates (no app release required).
@@ -282,6 +290,4 @@ If widgets don't appear:
 - caching
 - schema validation and safety guardrails
 - cross-platform rendering contract evolution
-
----
 
