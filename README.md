@@ -24,7 +24,7 @@ Products publish events and own widget logic (rules/templates). Core consumes ev
 
 ## 3. PoC Summary
 
-This PoC implements **Option A (Event + Rules)**:
+This PoC implements **(Event + Rules)**:
 
 1) Product services emit **user events**
 2) Core **Widget Processor** consumes events from **Redis Streams**
