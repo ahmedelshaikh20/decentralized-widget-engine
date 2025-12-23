@@ -1,16 +1,51 @@
-# React + Vite
+## 1. Executive Summary
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Goal:**  
+Imagine opening CHECK24 on your phone and quickly searching for flights to Munich. Later that evening, you open your laptop to continue your search. Instead of starting from scratch, you see personalized widgets showing relevant flights based on your earlier activity. That seamless, consistent experience across all devices is our goal.
 
-Currently, two official plugins are available:
+Now zoom out: Each CHECK24 product operates as an independent system with its own data and operational limits. The Home page, however, receives traffic that can dwarf any individual product. If Home directly requested personalized widget content from dozens of backend products during peak load, it would accidentally become a traffic amplifier.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Ex: A single user opening the Home page could trigger 30+ backend calls. Now imagine this on peak times like Black Friday—the load would be catastrophic.
 
-## React Compiler
+**Solution Overview:**  
+Products publish events and own widget logic (rules/templates). Core consumes events, generates widgets asynchronously, and stores them in a TTL-based cache. Home reads from cache only → no load amplification and no cascading failures.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 2. Repository Deliverables
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Concept:** `CONCEPT.md`
+- **Developer guide:** `DEVELOPER_GUIDELINE.md`
+- **Live PoC (Web Home):** http://165.22.27.127/?userId=400&userName=Ahmed
+- **Live PoC (Widgets API):** http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB
+- **Application video (5 min):** <ADD VIDEO URL>
+
+---
+
+## 3. PoC Summary
+
+This PoC implements **Option A (Event + Rules)**:
+
+1) Product services emit **user events**
+2) Core **Widget Processor** consumes events from **Redis Streams**
+3) Processor evaluates **product-owned YAML rules** and builds widgets
+4) Widgets are written to **Redis cache (per user)**
+5) Home clients fetch from **Gateway (cache-only)**
+
+---
+
+## 4. Quick Demo
+
+Fetch widgets:
+```bash
+curl "http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB"
+````
+## 5. Run Locally
+
+**Fetch widgets**
+```
+docker compose up -d --build
+```
+
+
+
