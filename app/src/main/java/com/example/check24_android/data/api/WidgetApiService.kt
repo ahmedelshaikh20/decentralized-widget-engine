@@ -1,6 +1,6 @@
 package com.example.check24_android.data.api
 
-import com.example.check24_android.data.model.WidgetResponseDto
+import com.example.check24_android.data.model.widgets.WidgetResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
