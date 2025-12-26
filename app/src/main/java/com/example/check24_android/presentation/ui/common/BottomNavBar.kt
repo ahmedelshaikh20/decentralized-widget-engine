@@ -9,6 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.check24_android.presentation.navigation.Dashboard
+import com.example.check24_android.presentation.navigation.Flights
+import com.example.check24_android.presentation.navigation.Insurance
 import com.example.check24_android.presentation.ui.theme.AppCardDefaults
 import com.example.check24_android.presentation.ui.theme.BottomNavDefaults
 import com.example.check24_android.presentation.ui.theme.BrandWhite
@@ -19,13 +22,12 @@ import com.example.check24_android.presentation.ui.theme.NavUnselected
 sealed class BottomNavItem(
   val title: String,
   val icon: ImageVector,
-  val route: String
+  val destination: Any
 ) {
-  object Home : BottomNavItem("Home", Icons.Filled.Home, "home")
-  object Flights : BottomNavItem("Flights", Icons.Filled.ArrowForward, "flights")
-  object Insurance : BottomNavItem("Insurance", Icons.Filled.Star, "insurance")
-  object Internet : BottomNavItem("Internet", Icons.Filled.Search, "internet")
-  object Loans : BottomNavItem("Loans", Icons.Filled.MailOutline, "loans")
+  object HomeItem : BottomNavItem("Home", Icons.Filled.Home, Dashboard)
+  object FlightsItem : BottomNavItem("Flights", Icons.Filled.PlayArrow, Flights)
+  object InsuranceItem : BottomNavItem("Insurance", Icons.Filled.DateRange, Insurance)
+
 }
 
 
@@ -36,22 +38,20 @@ sealed class BottomNavItem(
   @Composable
   fun Check24BottomBar(
     currentRoute: String,
-    onNavigate: (String) -> Unit
+    onNavigate: (Any) -> Unit
   ) {
     val items = listOf(
-      BottomNavItem.Home,
-      BottomNavItem.Flights,
-      BottomNavItem.Insurance,
-      BottomNavItem.Internet,
-      BottomNavItem.Loans
-    )
+      BottomNavItem.HomeItem,
+      BottomNavItem.FlightsItem,
+      BottomNavItem.InsuranceItem
+      )
 
     NavigationBar(
       containerColor = BrandWhite,
       tonalElevation = AppCardDefaults.elevation,
     ) {
       items.forEach { item ->
-        val isSelected = currentRoute == item.route
+        val isSelected = currentRoute == item.destination
 
         NavigationBarItem(
           label = {
@@ -70,7 +70,7 @@ sealed class BottomNavItem(
             )
           },
           selected = isSelected,
-          onClick = { onNavigate(item.route) },
+          onClick = { onNavigate(item.destination) },
 
           colors = NavigationBarItemDefaults.colors(
             selectedIconColor = NavSelected,
