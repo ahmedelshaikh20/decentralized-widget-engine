@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+  kotlin("plugin.serialization") version "1.9.24"
 }
 
 android {
@@ -77,7 +78,12 @@ dependencies {
   implementation(libs.koin.androidx.compose)
 
   //Coil
-  implementation("io.coil-kt:coil-compose:2.6.0")
+  implementation(libs.coil.compose)
 
+  implementation(libs.material3)
+  implementation(libs.kotlinx.serialization.json)
+
+  //Data store
+  implementation("androidx.datastore:datastore-preferences:1.1.1")
 
 }
