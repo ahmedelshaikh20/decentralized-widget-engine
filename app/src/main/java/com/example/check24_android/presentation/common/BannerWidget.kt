@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -16,13 +15,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.check24_android.domain.model.WidgetData
+import com.example.check24_android.domain.model.payloads.v1.BannerV1Payload
 import com.example.check24_android.presentation.ui.common.PrimaryButton
 import com.example.check24_android.presentation.ui.theme.BrandWhite
 
 @Composable
 fun BannerWidget(
-  widget: WidgetData,
+  payload: BannerV1Payload,
   modifier: Modifier = Modifier,
   onCtaClick: (String) -> Unit
 ) {
@@ -32,10 +31,10 @@ fun BannerWidget(
       .padding(horizontal = 4.dp, vertical = 4.dp)
       .clip(RoundedCornerShape(16.dp))
   ) {
-    widget.imageUrl?.let { url ->
+    payload.imageUrl?.let { url ->
       AsyncImage(
         model = url,
-        contentDescription = widget.title,
+        contentDescription = payload.title,
         contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxWidth()
@@ -71,7 +70,7 @@ fun BannerWidget(
       Column(
         modifier = Modifier.fillMaxWidth()
       ) {
-        widget.title?.let {
+        payload.title?.let {
           Text(
             text = it,
             style = MaterialTheme.typography.headlineSmall.copy(
@@ -83,7 +82,7 @@ fun BannerWidget(
           Spacer(Modifier.height(8.dp))
         }
 
-        widget.subtitle?.let {
+        payload.subtitle?.let {
           Text(
             text = it,
             style = MaterialTheme.typography.bodyMedium.copy(
@@ -94,10 +93,10 @@ fun BannerWidget(
           Spacer(Modifier.height(16.dp))
         }
 
-        if (!widget.ctaUrl.isNullOrEmpty() && !widget.ctaLabel.isNullOrEmpty()) {
+        if (payload.cta?.url != null && payload.cta.label.isNotEmpty()) {
           PrimaryButton(
-            text = widget.ctaLabel,
-            onClick = { onCtaClick(widget.ctaUrl) },
+            text = payload.cta.label,
+            onClick = { onCtaClick(payload.cta.url) },
             modifier = Modifier.widthIn(max = 200.dp)
           )
         }

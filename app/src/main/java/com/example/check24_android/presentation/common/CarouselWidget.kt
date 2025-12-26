@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -20,23 +19,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.check24_android.domain.model.CarouselItem
-import com.example.check24_android.domain.model.WidgetData
+import com.example.check24_android.domain.model.payloads.v1.CarouselV1Payload
 import com.example.check24_android.presentation.ui.common.PrimaryButton
 import com.example.check24_android.presentation.ui.common.WidgetCardGradient
 import com.example.check24_android.presentation.ui.theme.BrandWhite
 
 @Composable
 fun CarouselWidget(
-  widget: WidgetData,
+  payload: CarouselV1Payload,
   modifier: Modifier = Modifier,
   onCtaClick: (String) -> Unit,
   onItemClick: (String) -> Unit = {}
 ) {
+
+
   WidgetCardGradient(
     modifier = modifier.padding(horizontal = 4.dp, vertical = 4.dp)
   ) {
-    widget.title?.let {
+    payload.title?.let {
       Text(
         text = it,
         style = MaterialTheme.typography.headlineSmall.copy(
@@ -48,7 +48,7 @@ fun CarouselWidget(
       Spacer(Modifier.height(6.dp))
     }
 
-    widget.subtitle?.let {
+    payload.subtitle?.let {
       Text(
         text = it,
         style = MaterialTheme.typography.bodyMedium.copy(
@@ -59,24 +59,26 @@ fun CarouselWidget(
       Spacer(Modifier.height(16.dp))
     }
 
-    widget.items?.let { carouselItems ->
+    payload.items.let { carouselItems ->
       LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
       ) {
         items(carouselItems) { item ->
           CarouselCard(
-            item = item,
-            onItemClick = { item.ctaUrl?.let { onItemClick(it) } }
+            title = item.title,
+            imageUrl = item.imageUrl,
+            ctaLabel = item.ctaLabel,
+            onClick = { item.ctaUrl?.let { onItemClick(it) } }
           )
         }
       }
       Spacer(Modifier.height(16.dp))
     }
 
-    if (!widget.ctaUrl.isNullOrEmpty() && !widget.ctaLabel.isNullOrEmpty()) {
+    if (payload.cta != null && payload.cta.label.isNotEmpty()) {
       PrimaryButton(
-        text = widget.ctaLabel,
-        onClick = { onCtaClick(widget.ctaUrl) },
+        text = payload.cta.label,
+        onClick = { onCtaClick(payload.cta.url) },
         modifier = Modifier.fillMaxWidth()
       )
     }
@@ -85,24 +87,25 @@ fun CarouselWidget(
 
 @Composable
 private fun CarouselCard(
-  item: CarouselItem,
-  onItemClick: () -> Unit
+  title: String?,
+  imageUrl: String?,
+  ctaLabel: String?,
+  onClick: () -> Unit
 ) {
   Surface(
     modifier = Modifier
       .width(200.dp)
       .height(160.dp)
       .clip(RoundedCornerShape(16.dp))
-      .clickable { onItemClick() },
+      .clickable { onClick() },
     shadowElevation = 2.dp,
     shape = RoundedCornerShape(16.dp)
   ) {
-    Box(
-      modifier = Modifier.fillMaxSize()
-    ) {
+    Box(Modifier.fillMaxSize()) {
+
       AsyncImage(
-        model = item.imageUrl,
-        contentDescription = item.title,
+        model = imageUrl,
+        contentDescription = title,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop
       )
@@ -111,11 +114,8 @@ private fun CarouselCard(
         modifier = Modifier
           .fillMaxSize()
           .background(
-            brush = Brush.verticalGradient(
-              colors = listOf(
-                Color.Transparent,
-                Color.Black.copy(alpha = 0.7f)
-              ),
+            Brush.verticalGradient(
+              listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f)),
               startY = 100f
             )
           )
@@ -128,7 +128,7 @@ private fun CarouselCard(
         verticalArrangement = Arrangement.Bottom
       ) {
         Text(
-          text = item.title ?: "",
+          text = title.orEmpty(),
           style = MaterialTheme.typography.titleMedium.copy(
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp
@@ -137,13 +137,11 @@ private fun CarouselCard(
           maxLines = 2
         )
 
-        item.ctaLabel?.let { label ->
+        ctaLabel?.let {
           Spacer(Modifier.height(4.dp))
           Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall.copy(
-              fontSize = 13.sp
-            ),
+            text = it,
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp),
             color = BrandWhite.copy(alpha = 0.9f)
           )
         }

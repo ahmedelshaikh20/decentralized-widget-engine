@@ -3,19 +3,24 @@ package com.example.check24_android.presentation.common
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.check24_android.domain.model.Widget
+import com.example.check24_android.presentation.model.BannerResolvedWidget
+import com.example.check24_android.presentation.model.CardResolvedWidget
+import com.example.check24_android.presentation.model.CarouselResolvedWidget
+import com.example.check24_android.presentation.model.ResolvedWidget
 
 @Composable
 fun HomeWidgetRenderer(
-  widget: Widget,
+  widget: ResolvedWidget,
   modifier: Modifier = Modifier,
   onCtaClick: (String) -> Unit
 ) {
-    when (widget.componentType.lowercase()) {
+  when (widget) {
+    is CarouselResolvedWidget -> CarouselWidget(widget.payload, modifier, onCtaClick)
 
-        "carousel" -> CarouselWidget(widget.data, modifier, onCtaClick)
+    is CardResolvedWidget -> CardWidget(widget.payload, modifier, onCtaClick)
 
-        "card" -> CardWidget(widget.data, modifier, onCtaClick)
-
-        "banner" -> BannerWidget(widget.data, modifier, onCtaClick)
-    }
+    is BannerResolvedWidget -> BannerWidget(widget.payload, modifier, onCtaClick)
+  }
 }
+
+
