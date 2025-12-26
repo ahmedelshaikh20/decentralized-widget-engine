@@ -18,8 +18,7 @@ Products publish events and own widget logic (rules/templates). Core consumes ev
 - **Developer guide:** `DEVELOPER_GUIDELINE.md`
 - **Live PoC (Web Home):** http://165.22.27.127/?userId=400&userName=Ahmed
 - **Live PoC (Widgets API):** http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB
-- **Application video (5 min):** https://www.youtube.com/watch?v=iPSvqACPiwo
-
+  [![Video](https://img.youtube.com/vi/iPSvqACPiwo/hqdefault.jpg)](https://www.youtube.com/watch?v=iPSvqACPiwo)
 ---
 
 ## 3. PoC Summary
@@ -42,7 +41,6 @@ curl "http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB"
 ````
 ## 5. Run Locally
 
-**Fetch widgets**
 ```
 docker compose up -d --build
 ```
