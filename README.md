@@ -18,7 +18,7 @@ Products publish events and own widget logic (rules/templates). Core consumes ev
 - **Developer guide:** `DEVELOPER_GUIDELINE.md`
 - **Live PoC (Web Home):** http://165.22.27.127/?userId=400&userName=Ahmed
 - **Live PoC (Widgets API):** http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB
-- **Application video (5 min):** <ADD VIDEO URL>
+- **Application video (5 min):** https://www.youtube.com/watch?v=iPSvqACPiwo
 
 ---
 
