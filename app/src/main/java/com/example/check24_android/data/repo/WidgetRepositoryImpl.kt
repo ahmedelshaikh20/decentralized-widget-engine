@@ -1,7 +1,7 @@
 package com.example.check24_android.data.repo
 
 import com.example.check24_android.data.api.WidgetApiService
-import com.example.check24_android.data.model.toDomain
+import com.example.check24_android.data.model.widgets.toDomain
 import com.example.check24_android.domain.model.WidgetResponse
 import com.example.check24_android.domain.repository.WidgetRepository
 
