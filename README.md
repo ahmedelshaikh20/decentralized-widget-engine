@@ -16,8 +16,9 @@ Products publish events and own widget logic (rules/templates). Core consumes ev
 
 - **Concept:** `CONCEPT.md`
 - **Developer guide:** `DEVELOPER_GUIDELINE.md`
-- **Live PoC (Web Home):** http://165.22.27.127/?userId=400&userName=Ahmed
-- **Live PoC (Widgets API):** http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB
+- **Android Apk** homewidegts-android.apk in the main branch / android code in a separate branch feature/frontend-android 
+- **Live PoC (Web Home):** http://64.226.105.176/?userId=123&userName=Ahmed
+- **Live PoC (Widgets API):** http://64.226.105.176:8083/api/v1/widgets?userId=400&platform=WEB
   [![Video](https://img.youtube.com/vi/iPSvqACPiwo/hqdefault.jpg)](https://www.youtube.com/watch?v=iPSvqACPiwo)
 ---
 
@@ -44,6 +45,18 @@ curl "http://165.22.27.127:8083/api/v1/widgets?userId=400&platform=WEB"
 ```
 docker compose up -d --build
 ```
+
+## 5. Run Android
+- To run android app : you can use the apk or run the code on Android Studio
+
+- To switch user in the android app use the following command: 
+```
+adb shell am start -W \                             
+  -n com.example.check24_android/.MainActivity \
+  -a android.intent.action.VIEW \
+  -d "check24://home?userId=123\&userName=Ahmed"
+```
+
 
 
 
