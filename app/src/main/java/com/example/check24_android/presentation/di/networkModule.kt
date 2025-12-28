@@ -28,14 +28,14 @@ val networkModule = module {
 
   single {
     Retrofit.Builder()
-      .baseUrl("http://165.22.27.127:8083/api/v1/")
+      .baseUrl("http://64.226.105.176:8083/api/v1/")
       .client(get())
       .addConverterFactory(GsonConverterFactory.create())
       .build()
   }
   single(named("FLIGHT")) {
     Retrofit.Builder()
-      .baseUrl("http://165.22.27.127:9001/")
+      .baseUrl("http://64.226.105.176:9001/")
       .addConverterFactory(GsonConverterFactory.create())
       .build()
   }
