@@ -10,9 +10,9 @@ export const getUserFromUrl = () => {
 export const USER_CONTEXT = getUserFromUrl();
 
 export const API_CONFIG = {
-  BASE_URL: 'http://165.22.27.127:8083/api/v1',
-  FLIGHT_API: 'http://165.22.27.127:9001/api/flight',
-  INSURANCE_API: 'http://165.22.27.127:9001/api/insurance',
+  BASE_URL: 'http://64.226.105.176:8083/api/v1',
+  FLIGHT_API: 'http://64.226.105.176:9001/api/flight',
+  INSURANCE_API: 'http://64.226.105.176:9001/api/insurance',
   USER_ID: USER_CONTEXT.userId,
   PLATFORM: 'WEB',
 };
