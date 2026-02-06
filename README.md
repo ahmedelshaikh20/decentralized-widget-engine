@@ -19,7 +19,6 @@ Products publish events and own widget logic (rules/templates). Core consumes ev
 - **Android Apk** homewidegts-android.apk in the main branch / android code in a separate branch feature/frontend-android 
 - **Live PoC (Web Home):** http://64.226.105.176/?userId=123&userName=Ahmed
 - **Live PoC (Widgets API):** http://64.226.105.176:8083/api/v1/widgets?userId=400&platform=WEB
-  [![Video](https://img.youtube.com/vi/iPSvqACPiwo/hqdefault.jpg)](https://www.youtube.com/watch?v=iPSvqACPiwo)
 ---
 
 ## 3. PoC Summary
